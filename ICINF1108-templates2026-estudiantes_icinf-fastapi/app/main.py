@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
 from app.shared.api_response import ApiResponse
+=======
+>>>>>>> 7511bcff5713372d6328dda7822594c4fbbe485a
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,6 +31,7 @@ def create_app() -> FastAPI:
 
     app.include_router(students_router)
     app.include_router(pets_router)
+<<<<<<< HEAD
 # Atrapa errores como 404 (No encontrado) o 409 (Conflicto de email duplicado)
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
@@ -51,6 +55,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             data=exc.errors()
         ).model_dump()
     )
+=======
+
+>>>>>>> 7511bcff5713372d6328dda7822594c4fbbe485a
     return app
 
 

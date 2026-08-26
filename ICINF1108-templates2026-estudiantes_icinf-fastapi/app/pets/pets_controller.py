@@ -64,3 +64,4 @@ def delete(studentId: str, petId: str):
         "message": "Mascota eliminada correctamente",
         "data": deleted_pet,
     }
+    # Cambio de prueba para PR

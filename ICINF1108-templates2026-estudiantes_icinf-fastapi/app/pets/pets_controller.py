@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+﻿from fastapi import APIRouter
 
 from app.pets.pets_schemas import CreatePetDto, Pet, UpdatePetDto
 from app.pets.pets_service import pets_service

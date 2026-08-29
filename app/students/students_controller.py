@@ -1,20 +1,35 @@
 from fastapi import APIRouter
+
 from app.pets.pets_service import pets_service
-from app.shared.response_wrapper import ApiResponse
 from app.students.students_schemas import CreateStudentDto, Student, UpdateStudentDto
 from app.students.students_service import students_service
+from app.shared.api_response import ApiResponse
 
 router = APIRouter(prefix="/api/students", tags=["Students"])
 
 
 @router.get("")
-def find_all() -> list[Student]:
-    return students_service.find_all()
+def find_all() -> ApiResponse[list[Student]]:
+    students = students_service.find_all()
+
+    return ApiResponse(
+        success=True,
+        status=200,
+        message="Estudiantes obtenidos correctamente",
+        data=students,
+    )
 
 
 @router.get("/{student_id}")
-def find_by_id(student_id: str) -> Student:
-    return students_service.find_by_id(student_id)
+def find_by_id(student_id: str) -> ApiResponse[Student]:
+    students = students_service.find_by_id(student_id)
+
+    return ApiResponse(
+        success=True,
+        status=200,
+        message="Estudiante obtenido correctamente",
+        data=students,
+    )
 
 
 @router.post("", status_code=201)
@@ -30,8 +45,7 @@ def update(student_id: str, body: UpdateStudentDto) -> Student:
 @router.delete("/{student_id}")
 def delete(student_id: str):
     deleted = students_service.delete(student_id)
-    
-    # Manejo de error si el estudiante no existe (status 404)
+
     if not deleted:
         return ApiResponse(
             success=False,
@@ -40,10 +54,8 @@ def delete(student_id: str):
             data=None
         )
 
-    # Eliminar las mascotas asociadas al estudiante
     pets_service.delete_all_for_student(student_id)
 
-    # Respuesta exitosa (status 200)
     return ApiResponse(
         success=True,
         status=200,

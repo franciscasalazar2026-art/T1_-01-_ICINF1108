@@ -16,12 +16,12 @@ def find_all(studentId: str):
         "success": True,
         "status": 200,
         "message": "Mascotas obtenidas correctamente",
-        "data": pets
+        "data": pets,
     }
 
-
+        
 @router.post("", status_code=201)
-def create(studentId: str, body: CreatePetDto)
+def create(studentId: str, body: CreatePetDto):
     new_pet = pets_service.create(studentId, body)
     return {
         "success": True,

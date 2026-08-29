@@ -7,7 +7,7 @@ router = APIRouter(
     prefix="/api/students/{studentId}/pets",
     tags=["Pets"],
 )
-
+git status
 
 @router.get("")
 def find_all(studentId: str):

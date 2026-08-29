@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-
+from typing import Any
+from fastapi import APIRouter, HTTPException
 from app.pets.pets_service import pets_service
 from app.students.students_schemas import CreateStudentDto, Student, UpdateStudentDto
 from app.students.students_service import students_service
@@ -49,22 +49,22 @@ def update(student_id: str, body: UpdateStudentDto) -> ApiResponse[Student]:
     )
 
 
-@router.delete("/{student_id}", status_code=204)
+@router.delete("/{student_id}", response_model=ApiResponse[Any])
 def delete(student_id: str):
-    students_service.delete(student_id)
-    # Como se eliminó, no devolvemos 'data', por eso le pasamos None
-    return ApiResponse(
-        success=True,
-        message="Estudiante eliminado correctamente",
-        data=None
-    )
+    try:
+        deleted = students_service.delete(student_id)
+        pets_service.delete_all_for_student(student_id)
 
-@router.delete("/{student_id}", status_code=204)
-def delete(student_id: str):
-    students_service.delete(student_id)
-    # Como se eliminó, no devolvemos 'data', por eso le pasamos None
-    return ApiResponse(
-        success=True,
-        message="Estudiante eliminado correctamente",
-        data=None
-    )
+        return ApiResponse(
+            success=True,
+            status=200,
+            message="Estudiante eliminado correctamente",
+            data=deleted
+        )
+    except HTTPException:
+        return ApiResponse(
+            success=False,
+            status=404,
+            message="Estudiante no encontrado",
+            data=None
+        )
